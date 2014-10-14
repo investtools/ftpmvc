@@ -1,32 +1,27 @@
-require 'ftpmvc/driver'
+require 'ftpmvc/access_filesystem_filter'
 require 'ftpmvc/file'
 
-describe FTPMVC::Driver do
-  let(:structure) do
+describe FTPMVC::AccessFilesystemFilter do
+  let(:filesystem) do
     FTPMVC::Directory.new('/') do
       directory :music
     end
   end
-  let(:driver) { FTPMVC::Driver.new(structure) }
+  let(:filter) { FTPMVC::AccessFilesystemFilter.new(filesystem, nil) }
   before do
     stub_const 'MusicDirectory', Class.new(FTPMVC::Directory)
   end
 
   describe '#dir_contents' do
-    it 'yields' do
-      expect { |b| driver.dir_contents('/', &b) }.to yield_control
-    end
-    it 'yields an array of DirectoryItem' do
-      driver.dir_contents('/') do |directory_items|
-        expect(directory_items.map(&:name)).to eq ['music']
-      end
+    it 'is an array' do
+      expect(filter.index('/')).to be_kind_of Array
     end
   end
 
-  describe '#change_dir' do
+  describe '#directory?' do
     context 'when path exists' do
-      it 'yields true' do
-        expect { |b| driver.change_dir('/music', &b) }.to yield_with_args true
+      it 'is true' do
+        expect(filter.directory?('/music')).to be true
       end
     end
     context 'when path is not a directory' do
@@ -35,18 +30,18 @@ describe FTPMVC::Driver do
           .to receive(:index)
           .and_return [ FTPMVC::File.new('bob_marley.mp3') ]
       end
-      it 'yields false' do
-        expect { |b| driver.change_dir('/music/bob_marley.mp3', &b) }.to yield_with_args false
+      it 'is false' do
+        expect(filter.directory?('/music/bob_marley.mp3')).to be false
       end
     end
     context 'when path does not exist' do
-      it 'yields false' do
-        expect { |b| driver.change_dir('/documents', &b) }.to yield_with_args false
+      it 'is false' do
+        expect(filter.directory?('/documents')).to be false
       end
     end
   end
 
-  describe '#get_file' do
+  describe '#get' do
     before do
       allow_any_instance_of(MusicDirectory)
         .to receive(:index)
@@ -55,9 +50,9 @@ describe FTPMVC::Driver do
         .to receive(:get).with('songs.txt')
         .and_return StringIO.new('Pink Floyd')
     end
-    it 'yields the return of the directory' do
-      expect { |b| driver.get_file('/music/songs.txt', &b) }
-        .to yield_with_args StringIO.new('Pink Floyd')
+    it 'is the return of the directory' do
+      expect(filter.get('/music/songs.txt').read)
+        .to eq 'Pink Floyd'
     end
   end
 
@@ -70,9 +65,9 @@ describe FTPMVC::Driver do
         .to receive(:get).with('documents.txt')
         .and_return nil
     end
-    it 'yields the return of the directory' do
-      expect { |b| driver.bytes('/music/songs.txt', &b) }
-        .to yield_with_args 10
+    it 'is the return of the directory' do
+      expect(filter.size('/music/songs.txt'))
+        .to eq 10
     end
   end
 end

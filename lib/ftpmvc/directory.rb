@@ -45,17 +45,17 @@ module FTPMVC
       end
     end
 
-    def directory(name, &block)
-      Directory.build(name, &block).tap do |directory|
-        @index << directory
-      end
-    end
-
     def directory?(path)
       resolve(path).kind_of?(Directory)
     end
 
     protected
+
+    def directory(name, &block)
+      Directory.build(name, &block).tap do |directory|
+        @index << directory
+      end
+    end
 
     def self.specific_handler_class_name(name)
       "#{name.to_s.camelize}Directory"

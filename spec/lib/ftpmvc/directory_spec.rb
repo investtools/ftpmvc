@@ -66,8 +66,9 @@ describe FTPMVC::Directory do
 
   describe '#directory' do
     it 'adds a Directory object to content' do
-      pictures = FTPMVC::Directory.new('pictures')
-      pictures.directory :safari
+      pictures = FTPMVC::Directory.new('pictures') do
+        directory :safari
+      end
       expect(pictures.resolve('safari')).to be_a FTPMVC::Directory
     end
   end
