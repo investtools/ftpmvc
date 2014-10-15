@@ -1,3 +1,5 @@
+require './spec/spec_helper'
+
 require 'ftpmvc/application'
 require 'ftpmvc/file'
 

@@ -1,3 +1,5 @@
+require './spec/spec_helper'
+
 require 'ftpmvc/access_filesystem_filter'
 require 'ftpmvc/file'
 
