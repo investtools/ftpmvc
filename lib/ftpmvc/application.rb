@@ -16,8 +16,8 @@ module FTPMVC
 
     protected
 
-    def filter(filter_class)
-      @filter_chain = filter_class.new(@fs, @filter_chain)
+    def filter(filter_class, options={})
+      @filter_chain = filter_class.new(@fs, @filter_chain, options)
     end
 
     def filesystem(&block)

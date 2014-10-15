@@ -4,8 +4,8 @@ module FTPMVC
 
     def_delegators :@chain, :index, :size, :get, :directory?
 
-    def initialize(fs, chain)
-      @fs, @chain = fs, chain
+    def initialize(fs, chain, options={})
+      @fs, @chain, @options = fs, chain, options
     end
   end
 end

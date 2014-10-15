@@ -16,7 +16,7 @@ module FTPMVC
         signature = EventMachine::start_server(@host, @port, EM::FTPD::Server, Driver, root)
         @port = Socket.unpack_sockaddr_in(EM.get_sockname(signature)).first
         puts "Server listening on #{@host}:#{@port}..."
-        yield if block_given?
+        Thread.new { yield self } if block_given?
       end
     end
     
