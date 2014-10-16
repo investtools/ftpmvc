@@ -1,3 +1,4 @@
+require 'forwardable'
 require 'ftpmvc/directory'
 require 'ftpmvc/filter'
 require 'ftpmvc/access_filesystem_filter'

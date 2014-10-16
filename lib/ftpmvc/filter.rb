@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module FTPMVC
   class Filter
     extend Forwardable
