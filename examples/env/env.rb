@@ -9,4 +9,7 @@ app = FTPMVC::Application.new do
   end
 end
 
-FTPMVC::Server.new(2222).start(app)
+FTPMVC::Server.new(2121).start(app) do |server|
+  puts "Server listening in #{server.host}:#{server.port}..."
+end
+

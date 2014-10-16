@@ -10,8 +10,8 @@ describe FTPMVC::Server do
         begin
           socket = TCPSocket.new('127.0.0.1', server.port)
           socket.close
-        rescue Errno::ECONNREFUSED, Errno::EADDRNOTAVAIL
-          fail 'Cannnot connect to server'
+        rescue Errno::ECONNREFUSED, Errno::EADDRNOTAVAIL => e
+          fail "Cannnot connect to server! (#{e.class}: #{e.message})"
         ensure
           server.stop
         end
