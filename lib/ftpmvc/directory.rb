@@ -1,3 +1,4 @@
+require 'active_support/dependencies'
 require 'active_support/core_ext/string/inflections'
 
 module FTPMVC
@@ -38,11 +39,7 @@ module FTPMVC
     end
 
     def self.build(name, &block)
-      if Object.const_defined?(specific_handler_class_name(name))
-        instance = Object::const_get(specific_handler_class_name(name)).new(name, &block)
-      else
-        instance = self.new(name, &block)
-      end
+      directory_class(name).new(name, &block)
     end
 
     def directory?(path)
@@ -57,8 +54,8 @@ module FTPMVC
       end
     end
 
-    def self.specific_handler_class_name(name)
-      "#{name.to_s.camelize}Directory"
+    def self.directory_class(name)
+      ActiveSupport::Dependencies.safe_constantize("#{name.to_s.camelize}Directory") || self
     end
   end
 end
