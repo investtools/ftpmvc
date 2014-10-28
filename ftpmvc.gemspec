@@ -5,7 +5,7 @@ require 'ftpmvc/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "ftpmvc"
-  spec.version       = Ftpmvc::VERSION
+  spec.version       = FTPMVC::VERSION
   spec.authors       = ["André Aizim Kelmanson"]
   spec.email         = ["akelmanson@gmail.com"]
   spec.summary       = "FTP MVC framework"

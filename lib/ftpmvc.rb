@@ -3,5 +3,5 @@ require 'ftpmvc/server'
 require 'ftpmvc/file'
 require 'ftpmvc/application'
 
-module Ftpmvc
+module FTPMVC
 end

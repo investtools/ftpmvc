@@ -1,3 +1,3 @@
-module Ftpmvc
+module FTPMVC
   VERSION = "0.0.2"
 end

@@ -1,4 +1,4 @@
-# Ftpmvc
+# FTPMVC
 
 TODO: Write a gem description
 
