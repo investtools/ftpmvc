@@ -4,18 +4,17 @@ require 'ftpmvc/server'
 module FTPMVC
   module TestHelpers
     def with_application(app)
-      FTPMVC::Server.new('127.0.0.1', 0).start_in_new_thread(app) do |server|
+      server = FTPMVC::Server.new('127.0.0.1', 0).start_in_new_thread(app)
+      begin
+        ftp = Net::FTP.new
         begin
-          ftp = Net::FTP.new
-          begin
-            ftp.connect('127.0.0.1', server.port)
-            yield ftp
-          ensure
-            ftp.close
-          end
+          ftp.connect('127.0.0.1', server.port)
+          yield ftp
         ensure
-          server.stop
+          ftp.close
         end
+      ensure
+        server.stop
       end
     end
 

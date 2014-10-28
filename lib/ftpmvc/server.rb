@@ -14,8 +14,8 @@ module FTPMVC
       queue = Queue.new
       server_thread = Thread.new do
         begin
-          start(application) do
-            queue << true
+          start(application) do |server|
+            queue << server
           end
         rescue => e
           $strerr.puts "Server error: #{e.class}: #{e.message}"
