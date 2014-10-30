@@ -15,13 +15,17 @@ module FTPMVC
       end
 
       def data
+        StringIO.new(csv)
+      end
+
+      protected
+
+      def csv
         ::CSV.generate do |csv|
           csv << header if header.present?
           rows.each { |row| csv << row.to_a.map { |f| format(f) } }
         end
       end
-
-      protected
 
       def format(field)
         self.class.format(field)
