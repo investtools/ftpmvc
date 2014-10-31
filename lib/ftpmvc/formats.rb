@@ -1,1 +1,0 @@
-require 'ftpmvc/formats/csv'

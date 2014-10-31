@@ -1,0 +1,1 @@
+include 'ftpmvc/authenticator/promiscuous'

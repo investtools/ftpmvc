@@ -1,6 +1,6 @@
 require './spec/spec_helper'
 
-require 'ftpmvc/formats/csv'
+require 'ftpmvc/format/csv'
 require 'ftpmvc/file'
 
 describe FTPMVC::Formats::CSV do
