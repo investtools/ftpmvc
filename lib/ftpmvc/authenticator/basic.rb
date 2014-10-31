@@ -1,12 +1,12 @@
 module FTPMVC
   module Authenticator
-    class Basic
+    class Basic < Struct.new(:users)
       def initialize(options={})
-        @users = options[:users]
+        super options[:users]
       end
 
       def authenticate(username, password)
-        @users[username] == password
+        users[username] == password
       end
     end
   end

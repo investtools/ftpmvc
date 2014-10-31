@@ -17,17 +17,23 @@ module FTPMVC
       instance_eval(&block) if block_given?
     end
 
-    protected
-
     def auth
       @authenticator ||= Authenticator::Promiscuous.new
     end
+
+    protected
 
     def filter(filter_class, options={})
       @filter_chain = filter_class.new(@fs, @filter_chain, options)
     end
 
-    def authenticator(authenticator)
+    def authenticator(authenticator, options={})
+      if authenticator.kind_of?(Symbol)
+        authenticator = FTPMVC::Authenticator.const_get(authenticator.to_s.camelize)
+      end
+      if authenticator.kind_of?(Class)
+        authenticator = authenticator.new(options)
+      end
       @authenticator = authenticator
     end
 

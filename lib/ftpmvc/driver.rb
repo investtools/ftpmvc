@@ -12,7 +12,7 @@ module FTPMVC
     end
 
     def authenticate(username, password)
-      yield true
+      yield @application.authenticate(username, password)
     end
 
     def change_dir(path)
