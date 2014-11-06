@@ -11,16 +11,6 @@ module FTPMVC
       instance_eval(&block) if block_given?
     end
 
-    def size(path)
-      io = get(path)
-      return nil if io.nil?
-      total_size = 0
-      while buffer = io.read(1024)
-        total_size += buffer.size
-      end
-      total_size
-    end
-
     def get(path)
       file = resolve(path)
       file ? file.data : nil
@@ -40,10 +30,6 @@ module FTPMVC
 
     def self.build(name, &block)
       directory_class(name).new(name, &block)
-    end
-
-    def directory?(path)
-      resolve(path).kind_of?(Directory)
     end
 
     protected

@@ -57,19 +57,4 @@ describe FTPMVC::AccessFilesystemFilter do
         .to eq 'Pink Floyd'
     end
   end
-
-  describe '#bytes' do
-    before do
-      allow_any_instance_of(MusicDirectory)
-        .to receive(:get).with('songs.txt')
-        .and_return StringIO.new('Pink Floyd')
-      allow_any_instance_of(MusicDirectory)
-        .to receive(:get).with('documents.txt')
-        .and_return nil
-    end
-    it 'is the return of the directory' do
-      expect(filter.size('/music/songs.txt'))
-        .to eq 10
-    end
-  end
 end

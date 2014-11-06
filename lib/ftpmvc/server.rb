@@ -1,5 +1,5 @@
-require 'em-ftpd'
-require 'ftpmvc/driver'
+require 'ftpd'
+require 'ftpmvc/ftpd'
 
 module FTPMVC
   class Server
@@ -11,30 +11,25 @@ module FTPMVC
     end
 
     def start_in_new_thread(application)
-      queue = Queue.new
-      server_thread = Thread.new do
-        begin
-          start(application) do |server|
-            queue << server
-          end
-        rescue => e
-          $strerr.puts "Server error: #{e.class}: #{e.message}"
-        end
-      end
-      queue.pop
+      driver = Ftpd::Driver.new(application)
+      @server = ::Ftpd::FtpServer.new(driver)
+      @server.interface, @server.port = @address, @port
+      @server.start
+      @port = @server.bound_port
+      self
     end
 
     def start(application)
-      EM.epoll
-      EM::run do
-        @signature = EM::start_server(@host, @port, EM::FTPD::Server, Driver, application)
-        @port = Socket.unpack_sockaddr_in(EM.get_sockname(@signature)).first
-        yield self if block_given?
-      end
+      start_in_new_thread(application)
+      yield self if block_given?
+      # Manter o instance_variable_get até o pull request #29 ser aprovado
+      # o uma nova versão ficar disponível.
+      @server.instance_variable_get(:@server_thread).join
+      # @server.join
     end
     
     def stop
-      EM.stop_server(@signature)
+      @server.stop
     end
   end
 end

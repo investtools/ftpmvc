@@ -12,12 +12,12 @@ module FTPMVC
       @fs.resolve(path).index
     end
 
-    def size(path)
-      @fs.resolve(::File.dirname(path)).size(::File.basename(path))
+    def directory?(path)
+      @fs.resolve(path).kind_of?(Directory)
     end
 
-    def directory?(path)
-      @fs.directory?(path)
+    def exists?(path)
+      not @fs.resolve(path).nil?
     end
   end
 end

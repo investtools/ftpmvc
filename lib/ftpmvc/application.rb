@@ -8,7 +8,7 @@ module FTPMVC
   class Application
     extend Forwardable
 
-    def_delegators :@filter_chain, :index, :size, :get, :directory?
+    def_delegators :@filter_chain, :index, :get, :directory?, :exists?
     def_delegators :auth, :authenticate
 
     def initialize(&block)

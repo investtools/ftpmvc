@@ -4,6 +4,7 @@ if ENV.include?('CODECLIMATE_REPO_TOKEN')
 end
 
 require 'ftpmvc/test_helpers'
+require 'active_support/dependencies'
 
 RSpec.configure do |config|
   config.include FTPMVC::TestHelpers

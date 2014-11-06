@@ -1,11 +1,12 @@
 require './spec/spec_helper'
-require 'ftpmvc/application'
+
+require 'ftpmvc'
 
 describe 'Operation' do
   before do
     music_directory_class = Class.new(FTPMVC::Directory) do
-      def size(path)
-        69
+      def index
+        [ FTPMVC::File.new('pink_floyd.mp3') ]
       end
 
       def get(path)
@@ -39,18 +40,34 @@ describe 'Operation' do
     end
   end
   describe 'SIZE' do
-    it 'checks if directory exists' do
+    it 'is the file size' do
       with_application(app) do |ftp|
         ftp.login
-        expect(ftp.size('/music/pink_floyd.mp3')).to eq 69
+        expect(ftp.size('/music/pink_floyd.mp3')).to eq 7
       end
     end
   end
   describe 'GET' do
-    it 'checks if directory exists' do
+    it 'is the file content' do
       with_application(app) do |ftp|
         ftp.login
         expect(get(ftp, '/music/pink_floyd.mp3')).to eq 'content'
+      end
+    end
+  end
+  describe 'GET' do
+    it 'is the file content' do
+      with_application(app) do |ftp|
+        ftp.login
+        expect(get(ftp, '/music/pink_floyd.mp3')).to eq 'content'
+      end
+    end
+  end
+  describe 'MDTM' do
+    it 'is the modification time of a file' do
+      with_application(app) do |ftp|
+        ftp.login
+        expect(ftp.mdtm('/music/pink_floyd.mp3')).to be_a_kind_of String
       end
     end
   end

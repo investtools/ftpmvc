@@ -75,25 +75,6 @@ describe FTPMVC::Directory do
     end
   end
 
-  describe '#size' do
-    before do
-      allow(documents)
-        .to receive(:get).with('password.txt')
-        .and_return StringIO.new('12345678')
-      allow(documents)
-        .to receive(:get).with('users.txt')
-        .and_return nil
-    end
-    it 'is the size in bytes of #get return' do
-      expect(documents.size('password.txt')).to eq 8
-    end
-    context 'when #get returns nil' do
-      it 'is nil' do
-        expect(documents.size('users.txt')).to be_nil
-      end
-    end
-  end
-
   describe '#get' do
     let(:password_txt) { FTPMVC::File.new('password.txt') }
     before do

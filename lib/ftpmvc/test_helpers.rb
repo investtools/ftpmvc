@@ -11,7 +11,7 @@ module FTPMVC
           ftp.connect('127.0.0.1', server.port)
           yield ftp
         ensure
-          ftp.close
+          ftp.close rescue nil
         end
       ensure
         server.stop

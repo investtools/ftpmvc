@@ -1,6 +1,7 @@
 require './spec/spec_helper'
 
 require 'ftpmvc/server'
+require 'ftpmvc/directory'
 
 describe FTPMVC::Server do
   describe '#start' do
