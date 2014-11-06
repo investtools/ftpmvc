@@ -6,11 +6,11 @@ module FTPMVC
       end
 
       def dir(path)
-        @application.index(path[/^[^*]*/]).map { |node| ::File.join(path, node.name) }
+        @application.index(path.gsub('/*', '')).map { |node| ::File.join(path, node.name) }
       end
 
       def directory?(path)
-        @application.directory?(path)
+        @application.directory?(path.gsub('/*', ''))
       end
 
       def read(path)
@@ -29,7 +29,7 @@ module FTPMVC
         ::Ftpd::FileInfo.new(
           :ftype => directory?(path) ? 'directory' : 'file',
           :group => 'nogroup',
-          :mode => 0777,
+          :mode => directory?(path) ? 0750 : 0640,
           :mtime => Time.now,
           :nlink => 33,
           :owner => 'nobody',
