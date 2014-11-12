@@ -14,6 +14,10 @@ module FTPMVC
       driver = Ftpd::Driver.new(application)
       @server = ::Ftpd::FtpServer.new(driver)
       @server.interface, @server.port = @address, @port
+      @server.on_exception do |e|
+        puts e
+        puts e.backtrace
+      end
       @server.start
       @port = @server.bound_port
       self
@@ -22,10 +26,7 @@ module FTPMVC
     def start(application)
       start_in_new_thread(application)
       yield self if block_given?
-      # Manter o instance_variable_get até o pull request #29 ser aprovado
-      # o uma nova versão ficar disponível.
-      @server.instance_variable_get(:@server_thread).join
-      # @server.join
+      @server.join
     end
     
     def stop

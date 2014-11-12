@@ -3,10 +3,10 @@ require './spec/spec_helper'
 require 'ftpmvc/format/csv'
 require 'ftpmvc/file'
 
-describe FTPMVC::Formats::CSV do
+describe FTPMVC::Format::CSV do
   let(:csv_file_class) do
     Class.new(FTPMVC::File) do
-      include FTPMVC::Formats::CSV
+      include FTPMVC::Format::CSV
       def rows
         [['a', 'b', 'c'], ['d', 'e', 'f']]
       end
@@ -38,7 +38,7 @@ describe FTPMVC::Formats::CSV do
     context 'when date_format is defined' do
       let(:csv_file_class) do
         Class.new(FTPMVC::File) do
-          include FTPMVC::Formats::CSV
+          include FTPMVC::Format::CSV
           date_format '%m/%d/%y'
           def rows
             [[Date.parse('2011-01-01')]]

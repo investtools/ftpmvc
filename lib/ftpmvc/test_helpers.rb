@@ -18,12 +18,12 @@ module FTPMVC
       end
     end
 
-    def get(ftp, path)
+    def get(ftp, path, encoding=nil)
       ''.tap do |response|
         ftp.retrbinary("RETR #{path}", 1024) do |block|
-          response << block.force_encoding('UTF-8')
+          response << block
         end
-        response
+        response.force_encoding(encoding) unless encoding.nil?
       end
     end
   end

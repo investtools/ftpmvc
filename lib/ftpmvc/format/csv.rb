@@ -2,16 +2,12 @@ require 'active_support/concern'
 require 'csv'
 
 module FTPMVC
-  module Formats
+  module Format
     module CSV
       extend ActiveSupport::Concern
-      @@date_format = nil
 
-      def header
-      end
-
-      def name
-        "#{super}.csv"
+      def initialize(filename)
+        super "#{filename}.csv"
       end
 
       def data
@@ -19,6 +15,9 @@ module FTPMVC
       end
 
       protected
+
+      def header
+      end
 
       def csv
         ::CSV.generate do |csv|
