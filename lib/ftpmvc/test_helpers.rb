@@ -26,5 +26,9 @@ module FTPMVC
         response.force_encoding(encoding) unless encoding.nil?
       end
     end
+
+    def put(ftp, path, content)
+      ftp.storlines("STOR #{path}", StringIO.new(content))
+    end
   end
 end

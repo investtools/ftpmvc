@@ -25,6 +25,11 @@ module FTPMVC
         yield @application.get(path)
       end
 
+      def write(path, stream)
+        logger.debug { "FTPMVC::Ftpd::FileSystem#write(#{path}, ...)" }
+        @application.put(path, stream)
+      end
+
       def accessible?(path)
         logger.debug { "FTPMVC::Ftpd::FileSystem#accessible?(#{path})" }
         true

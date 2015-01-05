@@ -16,6 +16,10 @@ module FTPMVC
       file ? file.data : nil
     end
 
+    def put(path, stream)
+      puts 'foooi!!!'
+    end
+
     def resolve(path)
       path = path.gsub(%r{^/}, '')
       return self if path.empty?

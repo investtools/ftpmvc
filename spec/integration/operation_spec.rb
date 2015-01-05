@@ -55,19 +55,21 @@ describe 'Operation' do
       end
     end
   end
-  describe 'GET' do
-    it 'is the file content' do
-      with_application(app) do |ftp|
-        ftp.login
-        expect(get(ftp, '/music/pink_floyd.mp3')).to eq 'content'
-      end
-    end
-  end
   describe 'MDTM' do
     it 'is the modification time of a file' do
       with_application(app) do |ftp|
         ftp.login
         expect(ftp.mdtm('/music/pink_floyd.mp3')).to be_a_kind_of String
+      end
+    end
+  end
+  describe 'PUT' do
+    it 'is processed by the directory' do
+      expect_any_instance_of(MusicDirectory)
+        .to receive(:put)
+      with_application(app) do |ftp|
+        ftp.login
+        put(ftp, '/music/the_doors.mp3', 'light my fire')
       end
     end
   end

@@ -19,5 +19,9 @@ module FTPMVC
     def exists?(path)
       not @fs.resolve(path).nil?
     end
+
+    def put(path, stream)
+      @fs.resolve(::File.dirname(path)).put(::File.basename(path), stream)
+    end
   end
 end

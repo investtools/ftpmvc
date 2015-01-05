@@ -57,4 +57,14 @@ describe FTPMVC::AccessFilesystemFilter do
         .to eq 'Pink Floyd'
     end
   end
+
+  describe '#put' do
+    let(:stream) { double('stream') }
+    it 'forwards to directory' do
+      expect_any_instance_of(MusicDirectory)
+        .to receive(:put)
+        .with 'songs.txt', stream
+      filter.put('/music/songs.txt', stream)
+    end
+  end
 end
