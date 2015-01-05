@@ -14,10 +14,7 @@ module FTPMVC
       driver = Ftpd::Driver.new(application)
       @server = ::Ftpd::FtpServer.new(driver)
       @server.interface, @server.port = @address, @port
-      @server.on_exception do |e|
-        puts e
-        puts e.backtrace
-      end
+      @server.on_exception { |e| application.handle_exception(e) }
       @server.start
       @port = @server.bound_port
       self

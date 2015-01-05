@@ -93,4 +93,29 @@ describe FTPMVC::Application do
       expect(application.authenticate('fabio', 'iS2grails')).to be true
     end
   end
+
+  describe '#handle_exception' do
+    let(:exception) { Exception.new }
+    let(:application) do
+      handler = lambda { |e| @exception_handler_executed = true }
+      FTPMVC::Application.new do
+        on_exception(&handler)
+      end
+    end
+    before do
+      exception.set_backtrace([])
+    end
+    it 'calls exception handler' do
+      application.handle_exception(exception)
+      expect(@exception_handler_executed).to be true
+    end
+    context 'when exception handler is not defined' do
+      let(:application) do
+        FTPMVC::Application.new
+      end
+      it 'does not call nil' do
+        expect { application.handle_exception(exception) }.to_not raise_error
+      end
+    end
+  end
 end

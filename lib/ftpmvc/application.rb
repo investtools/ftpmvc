@@ -6,6 +6,7 @@ require 'ftpmvc/authenticator/promiscuous'
 
 module FTPMVC
   class Application
+    include Logger
     extend Forwardable
 
     def_delegators :@filter_chain, :index, :get, :directory?, :exists?, :put
@@ -21,7 +22,16 @@ module FTPMVC
       @authenticator ||= Authenticator::Promiscuous.new
     end
 
+    def handle_exception(e)
+      logger.error %Q[#{e.class}: #{e.message}\n#{e.backtrace.join("\n")}]
+      @exception_handler.call(e) unless @exception_handler.nil?
+    end
+
     protected
+
+    def on_exception(&block)
+      @exception_handler = block
+    end
 
     def filter(filter_class, options={})
       @filter_chain = filter_class.new(@fs, @filter_chain, options)
