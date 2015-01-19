@@ -1,15 +1,15 @@
 require './spec/spec_helper'
 
-require 'ftpmvc/access_filesystem_filter'
+require 'ftpmvc/filter/filesystem_access'
 require 'ftpmvc/file'
 
-describe FTPMVC::AccessFilesystemFilter do
+describe FTPMVC::Filter::FilesystemAccess do
   let(:filesystem) do
     FTPMVC::Directory.new('/') do
       directory :music
     end
   end
-  let(:filter) { FTPMVC::AccessFilesystemFilter.new(filesystem, nil) }
+  let(:filter) { FTPMVC::Filter::FilesystemAccess.new(filesystem, nil) }
   before do
     stub_const 'MusicDirectory', Class.new(FTPMVC::Directory)
   end

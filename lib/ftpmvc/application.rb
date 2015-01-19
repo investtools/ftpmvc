@@ -1,7 +1,6 @@
 require 'forwardable'
 require 'ftpmvc/directory'
-require 'ftpmvc/filter'
-require 'ftpmvc/access_filesystem_filter'
+require 'ftpmvc/filter/filesystem_access'
 require 'ftpmvc/authenticator/promiscuous'
 
 module FTPMVC
@@ -14,7 +13,7 @@ module FTPMVC
 
     def initialize(&block)
       @fs = Directory.new('/')
-      @filter_chain = AccessFilesystemFilter.new(@fs, nil)
+      @filter_chain = Filter::FilesystemAccess.new(@fs, nil)
       instance_eval(&block) if block_given?
     end
 
@@ -33,8 +32,11 @@ module FTPMVC
       @exception_handler = block
     end
 
-    def filter(filter_class, options={})
-      @filter_chain = filter_class.new(@fs, @filter_chain, options)
+    def filter(filter, options={})
+      if filter.kind_of?(Symbol)
+        filter = FTPMVC::Filter.const_get(filter.to_s.camelize)
+      end
+      @filter_chain = filter.new(@fs, @filter_chain, options)
     end
 
     def authenticator(authenticator, options={})
