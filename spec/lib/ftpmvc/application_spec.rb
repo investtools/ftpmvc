@@ -18,7 +18,7 @@ describe FTPMVC::Application do
       FTPMVC::Application.new do
         filter FTPMVC::Filter::Foo
         filesystem do
-          directory :music
+          directory name: 'music'
         end
       end
     end
@@ -30,7 +30,7 @@ describe FTPMVC::Application do
         FTPMVC::Application.new do
           filter FTPMVC::Filter::Base
           filesystem do
-            directory :music
+            directory name: 'music'
           end
         end
       end

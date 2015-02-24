@@ -12,7 +12,7 @@ module FTPMVC
     def_delegators :auth, :authenticate
 
     def initialize(&block)
-      @fs = Directory.new('/')
+      @fs = Directory.new
       @filter_chain = Filter::FilesystemAccess.new(@fs, nil)
       instance_eval(&block) if block_given?
     end

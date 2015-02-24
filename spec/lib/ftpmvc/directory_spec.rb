@@ -7,24 +7,14 @@ describe FTPMVC::Directory do
   before do
     stub_const 'DocumentsDirectory', Class.new(FTPMVC::Directory)
   end
-  let(:documents) { DocumentsDirectory.new('documents') }
-  describe '.build' do
-    context 'when there is a specific directory class' do
-      it 'is an instance this specific class' do
-        expect(FTPMVC::Directory.build(:documents)).to be_a DocumentsDirectory
-      end
-      it 'is an instance of DirectoryHandler' do
-        expect(FTPMVC::Directory.build(:music)).to be_a FTPMVC::Directory
-      end
-    end
-  end
+  let(:documents) { DocumentsDirectory.new(name: 'documents') }
   
   describe '#resolve' do
     before do
       stub_const 'ConfidentialDirectory', Class.new(FTPMVC::Directory)
       allow(documents)
         .to receive(:index)
-        .and_return [ FTPMVC::File.new('contract.doc'), ConfidentialDirectory.new('confidential') ]
+        .and_return [ FTPMVC::File.new('contract.doc'), ConfidentialDirectory.new(name: 'confidential') ]
       allow_any_instance_of(ConfidentialDirectory)
         .to receive(:index)
         .and_return [ FTPMVC::File.new('passwords.txt') ]
@@ -56,22 +46,59 @@ describe FTPMVC::Directory do
   end
 
   describe '#initialize' do
-    it 'converts name to string' do
-      expect(FTPMVC::Directory.new(:pictures).name).to eq 'pictures'
-    end
     it 'yields with instance_eval' do
       my_class = nil
-      FTPMVC::Directory.new('pictures') { my_class = self.class }
+      FTPMVC::Directory.new(name: 'pictures') { my_class = self.class }
       expect(my_class).to be FTPMVC::Directory
     end
   end
 
   describe '#directory' do
     it 'adds a Directory object to content' do
-      pictures = FTPMVC::Directory.new('pictures') do
-        directory :safari
+      pictures = FTPMVC::Directory.new(name: 'pictures') do
+        directory FTPMVC::Directory, name: 'safari'
       end
       expect(pictures.resolve('safari')).to be_a FTPMVC::Directory
+    end
+    context 'when a symbol is given' do
+      it 'creates an instance of the directory based on that symnol' do
+        home = FTPMVC::Directory.new(name: 'home') do
+          directory :documents, name: 'documents'
+        end
+        expect(home.resolve('documents')).to be_a DocumentsDirectory
+      end
+    end
+    context 'when a class is given' do
+      it 'creates an instance of the given class' do
+        home = FTPMVC::Directory.new(name: 'home') do
+          directory DocumentsDirectory, name: 'documents'
+        end
+        expect(home.resolve('documents')).to be_a DocumentsDirectory
+      end
+    end
+    context 'when a symbol is given and name is not' do
+      it 'sets the name based on that symbol' do
+        home = FTPMVC::Directory.new(name: 'home') do
+          directory :documents
+        end
+        expect(home.resolve('documents')).to be_a DocumentsDirectory
+      end
+    end
+    context 'when no symbol or class is given' do
+      it 'creates a FTPMVC::Directory' do
+        pictures = FTPMVC::Directory.new(name: 'pictures') do
+          directory name: 'safari'
+        end
+        expect(pictures.resolve('safari')).to be_a FTPMVC::Directory
+      end
+    end
+    context 'when an instance of directory is given' do
+      it 'uses that instance' do
+        pictures = FTPMVC::Directory.new(name: 'pictures') do
+          directory FTPMVC::Directory.new(name: 'safari')
+        end
+        expect(pictures.resolve('safari')).to be_a FTPMVC::Directory
+      end
     end
   end
 
