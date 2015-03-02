@@ -21,8 +21,8 @@ module FTPMVC
         not @fs.resolve(path).nil?
       end
 
-      def put(path, stream)
-        @fs.resolve(::File.dirname(path)).put(::File.basename(path), stream)
+      def put(path, input)
+        @fs.resolve(::File.dirname(path)).put(::File.basename(path), input)
       end
     end
   end

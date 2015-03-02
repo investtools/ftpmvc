@@ -59,12 +59,12 @@ describe FTPMVC::Filter::FilesystemAccess do
   end
 
   describe '#put' do
-    let(:stream) { double('stream') }
+    let(:input) { double('input') }
     it 'forwards to directory' do
       expect_any_instance_of(MusicDirectory)
         .to receive(:put)
-        .with 'songs.txt', stream
-      filter.put('/music/songs.txt', stream)
+        .with 'songs.txt', input
+      filter.put('/music/songs.txt', input)
     end
   end
 end

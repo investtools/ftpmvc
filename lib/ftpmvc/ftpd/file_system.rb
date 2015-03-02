@@ -1,4 +1,5 @@
 require 'ftpmvc/logger'
+require 'ftpmvc/ftpd/input'
 
 module FTPMVC
   module Ftpd
@@ -27,7 +28,7 @@ module FTPMVC
 
       def write(path, stream)
         logger.debug { "FTPMVC::Ftpd::FileSystem#write(#{path}, ...)" }
-        @application.put(path, stream)
+        @application.put(path, Input.new(stream))
       end
 
       def accessible?(path)

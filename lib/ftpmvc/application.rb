@@ -1,5 +1,6 @@
 require 'forwardable'
 require 'ftpmvc/directory'
+require 'ftpmvc/logger'
 require 'ftpmvc/filter/filesystem_access'
 require 'ftpmvc/authenticator/promiscuous'
 
