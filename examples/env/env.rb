@@ -3,7 +3,7 @@ require './env_directory'
 
 app = FTPMVC::Application.new do
   filesystem do
-    directory :system do
+    directory name: 'system' do
       directory :env
     end
   end

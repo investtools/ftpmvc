@@ -17,6 +17,7 @@ module FTPMVC
       @server.on_exception { |e| application.handle_exception(e) }
       @server.start
       @port = @server.bound_port
+      %w{ INT TERM }.each { |sig| Signal.trap(sig) { stop } }
       self
     end
 
